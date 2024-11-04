@@ -25,11 +25,11 @@ headers = {
 
 response = requests.get(url, headers=headers)
 
-# Сохраняем ответ в бинарном формате
+
 with open("response.bin", "wb") as file:
     file.write(response.content)
 
-# Чтение бинарного файла и попытка его декодирования в HTML
+
 try:
     with open("response.bin", "rb") as bin_file:
         binary_content = bin_file.read()
@@ -51,7 +51,7 @@ soup = BeautifulSoup(src, 'lxml')
 
 data = []
 
-# Ищем все контейнеры категории
+
 all_container = soup.find_all(class_="block-container")
 
 for container in all_container:
@@ -87,14 +87,12 @@ for container in all_container:
                     messages = messages_tag.find_next("dd").get_text(strip=True)
                     messages = parse_numeric(messages)
 
-            # Добавляем информацию о разделе
             sections.append({
                 "name": section_name,
                 "topics": topics,
                 "messages": messages
             })
 
-    # Добавляем категорию с разделами, если найдена категория и хотя бы один раздел
     if category_name and sections:
         data.append({
             "category": category_name,
@@ -111,7 +109,6 @@ with open("output.json", "w", encoding='utf-8') as f:
 with open("output.json", 'r', encoding='utf-8') as file:
     data = json.load(file)
 
-# Словарь для хранения количества сообщений в каждой категории
 category_messages = {}
 
 # Подсчет сообщений в каждой категории
@@ -123,7 +120,7 @@ for category in data:
             total_messages += messages
     category_messages[category['category']] = total_messages
 
-# Сортировка категорий по количеству сообщений в порядке убывания
+
 sorted_categories = sorted(category_messages.items(), key=lambda item: item[1], reverse=True)
 
 
